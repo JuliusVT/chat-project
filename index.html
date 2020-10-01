@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>	
+    <title>Socket.IO</title>
+</head>
+<style>
+	*{
+		padding: 0;
+		margin: 0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	body{
+		font-family: Verdana;
+	}
+	ul{
+		list-style-type: none;
+		padding: 20px;
+		background: #000;
+		color: #fff;
+	}
+	#controls{
+		position: absolute;
+		bottom: 0px;
+		left: 0px;
+		border-top : 2px #333 solid;
+		display: block;
+		width: 100%;
+	}
+	#controls #msj{
+		display: block;
+		padding: 20px;
+		float: left;
+		width: 80%;
+		font-size: 18pt;
+	}
+	#controls #btn{
+		float: right;
+		padding: 20px;
+	}
+	#controls #user{
+		display: block;
+		width: 100%;
+		font-size:24pt;
+	}
+	</style>
+</head>
+<body>
+    <script type="text/javascript">
+		var socket = io();
+		$(function(){
+			$("form").submit(function(){
+                var mensaje = $("#msj").val();
+                var user = $("#user").val();
+                if(mensaje=='') return false;
+                if(user=='') return false;
+
+                data = {
+                    mensaje:mensaje,
+                    user:user,
+                } 
+				socket.emit('message',data);
+                $("#msj").val('').focus();
+				$("#action").html('');
+				socket.emit('typing',null);
+
+				return false;
+            });
+            $("#msj").keypress(function () {
+                socket.emit('typing',$("#user").val());
+			});
+        });
+
+		socket.on('message',function(data){
+			$("#message").append($('<li>').text(data.user+' : ' +data.mensaje));
+		});
+		
+        socket.on('typing',function(data){
+			if(data)
+			{
+				$("#action").html('<p><em>'+data+ ' esta escribiendo...'+'</em></p>');
+			}else{
+				$("#action").html('');
+			}
+		});
+	</script>
+    <div id="action"></div>
+	<ul id="message">
+		
+	</ul>
+	<div id="controls">
+		<form action="">			
+			<input type="text" id="user" placeholder="usuario...">
+			<input type="text" id="msj" placeholder="Escribe tu mensaje...">
+			<input type="submit" id="btn" value="Enviar">
+		</form>
+	</div>
+</body>
+</html>
