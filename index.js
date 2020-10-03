@@ -14,9 +14,9 @@ io.sockets.on('connection', function(socket){
         io.emit('message',data);
     });
 
-    socket.on('typing',function (data) {
-        socket.broadcast.emit('typing',data)
-    })
+    // socket.on('typing',function (data) {
+    //     socket.broadcast.emit('typing',data)
+    // })
 });
 http.listen(PORT,function(){
     console.log('el servidor esta escuchando el puerto %s',PORT);

@@ -71,23 +71,23 @@
 
 				return false;
             });
-            $("#msj").keypress(function () {
-                socket.emit('typing',$("#user").val());
-			});
+            // $("#msj").keypress(function () {
+            //     socket.emit('typing',$("#user").val());
+			// });
         });
 
 		socket.on('message',function(data){
 			$("#message").append($('<li>').text(data.user+' : ' +data.mensaje));
 		});
 		
-        socket.on('typing',function(data){
-			if(data)
-			{
-				$("#action").html('<p><em>'+data+ ' esta escribiendo...'+'</em></p>');
-			}else{
-				$("#action").html('');
-			}
-		});
+        // socket.on('typing',function(data){
+		// 	if(data)
+		// 	{
+		// 		$("#action").html('<p><em>'+data+ ' esta escribiendo...'+'</em></p>');
+		// 	}else{
+		// 		$("#action").html('');
+		// 	}
+		// });
 	</script>
     <div id="action"></div>
 	<ul id="message">
